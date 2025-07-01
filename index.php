@@ -31,7 +31,7 @@ $statement2->closeCursor();
     <nav></nav>
     <header></header>
     <main>
-        <a href="">
+        <a href="http://localhost/ecommerce/">
             <h1>Product List</h1>
         </a>
         <nav>
