@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : mar. 01 juil. 2025 à 22:58
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Hôte : 172.21.82.208:3306
+-- Généré le : mer. 16 juil. 2025 à 13:21
+-- Version du serveur : 8.0.32
+-- Version de PHP : 8.2.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,12 +18,23 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `ecommerce_database`
+-- Base de données : `GROUP3`
+--
+CREATE DATABASE IF NOT EXISTS `GROUP3` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `GROUP3`;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cart_rows`
 --
 
-DROP DATABASE IF EXISTS ecommerce_database;
-CREATE DATABASE ecommerce_database;
-USE ecommerce_database;
+CREATE TABLE `cart_rows` (
+  `cart_row_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `quantity` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -32,8 +43,8 @@ USE ecommerce_database;
 --
 
 CREATE TABLE `food_categories` (
-  `category_id` int(11) NOT NULL,
-  `category_name` varchar(20) NOT NULL
+  `category_id` int NOT NULL,
+  `category_name` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -54,11 +65,11 @@ INSERT INTO `food_categories` (`category_id`, `category_name`) VALUES
 --
 
 CREATE TABLE `product_list` (
-  `product_id` int(11) NOT NULL,
-  `product_name` varchar(45) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `price` int(11) NOT NULL,
-  `stock` int(11) NOT NULL
+  `product_id` int NOT NULL,
+  `product_name` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `category_id` int NOT NULL,
+  `price` int NOT NULL,
+  `stock` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -117,9 +128,9 @@ INSERT INTO `product_list` (`product_id`, `product_name`, `category_id`, `price`
 --
 
 CREATE TABLE `transactions` (
-  `transaction_id` int(11) NOT NULL,
+  `transaction_id` int NOT NULL,
   `transaction_date` date NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -179,7 +190,8 @@ INSERT INTO `transactions` (`transaction_id`, `transaction_date`, `user_id`) VAL
 (50, '2025-06-19', 48),
 (51, '2025-06-18', 49),
 (52, '2025-06-17', 50),
-(53, '2025-07-01', 1);
+(53, '2025-07-01', 1),
+(54, '2025-07-06', 1);
 
 -- --------------------------------------------------------
 
@@ -188,10 +200,10 @@ INSERT INTO `transactions` (`transaction_id`, `transaction_date`, `user_id`) VAL
 --
 
 CREATE TABLE `transaction_rows` (
-  `transaction_row_id` int(11) NOT NULL,
-  `transaction_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL
+  `transaction_row_id` int NOT NULL,
+  `transaction_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `quantity` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -253,7 +265,9 @@ INSERT INTO `transaction_rows` (`transaction_row_id`, `transaction_id`, `product
 (52, 52, 4, 40),
 (53, 53, 10, 2),
 (54, 53, 12, 5),
-(55, 53, 2, 1);
+(55, 53, 2, 1),
+(56, 54, 1, 2),
+(57, 54, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -262,10 +276,10 @@ INSERT INTO `transaction_rows` (`transaction_row_id`, `transaction_id`, `product
 --
 
 CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
-  `user_name` varchar(45) DEFAULT NULL,
-  `user_email` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL
+  `user_id` int NOT NULL,
+  `user_name` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `user_email` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -273,7 +287,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_name`, `user_email`, `password`) VALUES
-(1, 'Thomas Paillereau', 'thomas.paillereau@example.com', 'YesButNo'),
+(1, 'Thomas Paillereau', 'thomas.paillereau@example.com', 'b97c16a8515a2bec288e6bffa87e484c737c3122'),
 (2, 'Emi Ito', 'emi.ito@example.com', ''),
 (3, 'Taro Yamada', 'taro.yamada@example.com', ''),
 (4, 'Sakura Kato', 'sakura.kato@example.com', ''),
@@ -322,11 +336,20 @@ INSERT INTO `users` (`user_id`, `user_name`, `user_email`, `password`) VALUES
 (47, 'Haruto Watanabe', 'haruto.w@example.com', ''),
 (48, 'Aoi Ito', 'aoi.ito@example.com', ''),
 (49, 'Hinata Tanaka', 'hinata.tanaka@example.com', ''),
-(50, 'Riku Hayashi', 'riku.hayashi@example.com', '');
+(50, 'Riku Hayashi', 'riku.hayashi@example.com', ''),
+(53, 'Thomas Soler', 'thomas.soler@example.com', 'cf5f43513c18c4e54a081af3f75df599222d67ae');
 
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `cart_rows`
+--
+ALTER TABLE `cart_rows`
+  ADD PRIMARY KEY (`cart_row_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Index pour la table `food_categories`
@@ -366,38 +389,51 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT pour la table `cart_rows`
+--
+ALTER TABLE `cart_rows`
+  MODIFY `cart_row_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
 -- AUTO_INCREMENT pour la table `food_categories`
 --
 ALTER TABLE `food_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `category_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `product_list`
 --
 ALTER TABLE `product_list`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `product_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT pour la table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `transaction_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT pour la table `transaction_rows`
 --
 ALTER TABLE `transaction_rows`
-  MODIFY `transaction_row_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `transaction_row_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `cart_rows`
+--
+ALTER TABLE `cart_rows`
+  ADD CONSTRAINT `cart_rows_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `cart_rows_ibfk_3` FOREIGN KEY (`product_id`) REFERENCES `product_list` (`product_id`);
 
 --
 -- Contraintes pour la table `product_list`

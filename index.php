@@ -1,6 +1,10 @@
 <?php
 $db = null;
 require_once('database.php');
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+}
+
 
 $product_name_q = filter_input(INPUT_GET, 'q');
 $queryProducts = 'SELECT * FROM product_list WHERE product_name LIKE :product_name_q ORDER BY product_id';
@@ -28,12 +32,25 @@ $statement2->closeCursor();
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <nav></nav>
-    <header></header>
-    <main>
-        <a href="http://localhost/ecommerce/">
+    <nav>
+        <a href="http://localhost/GROUP3/">
             <h1>Product List</h1>
         </a>
+        <?php if (isset($user_id)) {
+            echo "<a href='connexion/disconnect_user.php'><h1>Disconnect</h1></a>";
+            echo "<a href='commands/'><h1>Commands</h1></a>";
+            echo "<a href='cart/'><h1>Cart</h1></a>";
+        }
+        else
+        {
+            echo "<a href='connexion/'><h1>Connect</h1></a>";
+        }
+        ?>
+        </a>
+    </nav>
+    <header></header>
+    <main>
+
         <nav>
             <form action="" method="GET">
                 <input type="search" name="q" placeholder="Search a product...">
@@ -50,6 +67,10 @@ $statement2->closeCursor();
                     <div class="product_text">
                         <?php echo $product['product_name']; ?><br>
                         <?php echo $product['price']." yen"; ?>
+                        <form id="myForm" action="cart/add_to_cart.php" method="post">
+                            <input type="hidden" name="id" value=<?php echo $product['product_id']; ?>>
+                            <button type="submit">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
             <?php endforeach; ?>
